@@ -12,24 +12,42 @@ use 5.0014;
 
 setup_app();
 
+get '/' => sub {
+    my $self = shift;
+    $self->render_static('index.html');
+};
+
+get '/record' => sub {
+    my $self = shift;
+
+    try {
+        my @records = Record->find( -strict => 1 );
+        $self->render( json => \@records );
+    }
+
+    catch {
+        if ( ref $_ eq 'Gideon::Exception::NotFound' ) {
+            return $self->render_not_found;
+        }
+        $self->render_exception('Oops');
+    };
+};
+
 get '/record/:id' => sub {
     my $self = shift;
     my $id   = $self->param('id');
 
     try {
         my $record = Record->find_one( id => $id, -strict => 1 );
-
         $self->render( json => $record );
     }
 
     catch {
-        say $_;
         if ( ref $_ eq 'Gideon::Exception::NotFound' ) {
             return $self->render_not_found;
         }
         $self->render_exception('Oops');
     };
-
 };
 
 post '/record' => sub {
@@ -41,7 +59,6 @@ post '/record' => sub {
 
         $self->render( json => { id => $record->id } );
     }
-
     catch {
         $self->render_exception('Oops');
     };

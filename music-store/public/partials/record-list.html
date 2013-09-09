@@ -1,0 +1,26 @@
+<div>
+  <h2>Record List</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Artist</th>
+        <th>Released Date</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="record in records">
+        <td>{{ record.name }}</td>
+        <td>{{ record.artist }}</td>
+        <td>{{ record.released_at }}</td>
+        <td>
+          <a href="#/record/{{ record.id }}/edit">
+            <span class="glyphicon glyphicon-edit"></span>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <a class="btn btn-primary" href="#/record/add">Add</a>
+</div>
